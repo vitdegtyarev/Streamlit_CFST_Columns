@@ -1,4 +1,4 @@
-streamlit==1.8.0
+streamlit==1.8.1
 pandas==1.4.1
 numpy==1.20.3
 joblib==1.1.0
@@ -7,4 +7,3 @@ scikit-learn==1.0.2
 xgboost==1.5.0
 catboost==0.26.1
 protobuf==3.20.*
-click==8.0
