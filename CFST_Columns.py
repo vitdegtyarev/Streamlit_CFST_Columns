@@ -79,7 +79,16 @@ elif column_type=='Rectangular Beam-Column':
 
 st.subheader('Input Parameters')
 
-input_parameters_df=pd.DataFrame(data, index=[0])    
+input_parameters_df=pd.DataFrame(data, index=[0]) 
+
+hide_dataframe_row_index = """
+            <style>
+            .row_heading.level0 {display:none}
+            .blank {display:none}
+            </style>
+            """
+st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
+
 st.dataframe(input_parameters_df)
 
 if column_type=='Circular Column':
