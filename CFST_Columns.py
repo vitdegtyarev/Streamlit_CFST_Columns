@@ -706,4 +706,5 @@ elif column_type=='Rectangular Beam-Column':
     st.subheader('Nomenclature')
     st.write("B and H are the width and height of rectangular column cross section; CatBoost is categorical gradient boosting regressor; L is column length; Nn and Nd are the nominal and design resistances of columns; e is load eccentricity; f'c is concrete compressive strength; fy is steel yield strength; t is tube wall thickness.")
 
+st.write('Note: Circle markers indicate input parameters selected by user.')
 
