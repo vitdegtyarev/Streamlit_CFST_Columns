@@ -250,6 +250,8 @@ if column_type=='Circular Column':
     f1.tight_layout()
     st.pyplot(f1)
     
+    st.write('Note: Circle markers indicate input parameters selected by user.')
+    
     st.subheader('Nomenclature')
     st.write("D is the outside diameter of circular column cross section; L is column length; Nn and Nd are the nominal and design resistances of columns; XGBoost is extreme gradient boosting regressor; f'c is concrete compressive strength; fy is steel yield strength; t is tube wall thickness.")
 
@@ -391,6 +393,9 @@ elif column_type=='Circular Beam-Column':
     f1.legend(ncol=2, fontsize=10, bbox_to_anchor=(0.52, -0.07), loc='lower center')
     f1.tight_layout()
     st.pyplot(f1)
+    
+    st.write('Note: Circle markers indicate input parameters selected by user.')
+    
     st.subheader('Nomenclature')
     st.write("D is the outside diameter of circular column cross section; GBR is gradient boosting regressor; L is column length; Nn and Nd are the nominal and design resistances of columns; e is load eccentricity; f'c is concrete compressive strength; fy is steel yield strength; t is tube wall thickness.")
 
@@ -532,6 +537,9 @@ elif column_type=='Rectangular Column':
     f1.legend(ncol=2, fontsize=10, bbox_to_anchor=(0.52, -0.07), loc='lower center')
     f1.tight_layout()
     st.pyplot(f1)
+    
+    st.write('Note: Circle markers indicate input parameters selected by user.')
+    
     st.subheader('Nomenclature')
     st.write("B and H are the width and height of rectangular column cross section; L is column length; Nn and Nd are the nominal and design resistances of columns; XGBoost is extreme gradient boosting regressor; f'c is concrete compressive strength; fy is steel yield strength; t is tube wall thickness.")
 
@@ -703,8 +711,7 @@ elif column_type=='Rectangular Beam-Column':
     f1.tight_layout()
     st.pyplot(f1)
     
+    st.write('Note: Circle markers indicate input parameters selected by user.')
+    
     st.subheader('Nomenclature')
     st.write("B and H are the width and height of rectangular column cross section; CatBoost is categorical gradient boosting regressor; L is column length; Nn and Nd are the nominal and design resistances of columns; e is load eccentricity; f'c is concrete compressive strength; fy is steel yield strength; t is tube wall thickness.")
-
-st.write('Note: Circle markers indicate input parameters selected by user.')
-
