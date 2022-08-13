@@ -12,12 +12,12 @@ import matplotlib.pyplot as plt
 
 #Load models and scalers
 #Circular columns
-CC_XB=joblib.load(os.path.join(ROOT_DIR,'CFST_Circ_Columns_XGBoost_1p5p0.joblib'))
-CC_XB_sc=pickle.load(open(os.path.join(ROOT_DIR,'CFST_Circ_Columns_XGBoost_1p5p0.pkl'),'rb'))
+CC_GBR=joblib.load(os.path.join(ROOT_DIR,'CFST_Circ_Columns_GBR.joblib'))
+CC_GBR_sc=pickle.load(open(os.path.join(ROOT_DIR,'CFST_Circ_Columns_GBR.pkl'),'rb'))
 
 #Circular beam-columns
-CBC_GBR=joblib.load(os.path.join(ROOT_DIR,'CFST_Circ_Beam_Columns_GBR.joblib'))
-CBC_GBR_sc=pickle.load(open(os.path.join(ROOT_DIR,'CFST_Circ_Beam_Columns_GBR.pkl'),'rb'))
+CBC_XB=joblib.load(os.path.join(ROOT_DIR,'CFST_Circ_Beam_Columns_XGBoost_1p5p0.joblib'))
+CBC_XB_sc=pickle.load(open(os.path.join(ROOT_DIR,'CFST_Circ_Beam_Columns_XGBoost_1p5p0.pkl'),'rb'))
 
 #Rectangular columns
 RC_CB=joblib.load(os.path.join(ROOT_DIR,'CFST_Rect_Columns_CatBoost.joblib'))
@@ -28,8 +28,8 @@ RBC_CB=joblib.load(os.path.join(ROOT_DIR,'CFST_Rect_Beam_Columns_CatBoost.joblib
 RBC_CB_sc=pickle.load(open(os.path.join(ROOT_DIR,'CFST_Rect_Beam_Columns_CatBoost.pkl'),'rb'))
 
 #Resistance factors
-phi_CC_XB=0.85
-phi_CBC_GBR=0.75
+phi_CC_GBR=0.85
+phi_CBC_XB=0.75
 phi_RC_CB=0.85
 phi_RBC_CB=0.85
 
@@ -141,15 +141,15 @@ st.dataframe(input_parameters_df)
 
 if column_type=='Circular Column':
     X_ML_CC=np.array([[d,t,l,fy,fc]])
-    X_ML_CC_XB=CC_XB_sc.transform(X_ML_CC)
-    Nn_CC_XB=CC_XB.predict(X_ML_CC_XB).item()
-    Nd_CC_XB=Nn_CC_XB*phi_CC_XB
+    X_ML_CC_GBR=CC_GBR_sc.transform(X_ML_CC)
+    Nn_CC_GBR=CC_GBR.predict(X_ML_CC_GBR).item()
+    Nd_CC_GBR=Nn_CC_GBR*phi_CC_GBR
     
 elif column_type=='Circular Beam-Column':
     X_ML_CBC=np.array([[d,t,l,fy,fc,e,e]])
-    X_ML_CBC_GBR=CBC_GBR_sc.transform(X_ML_CBC)
-    Nn_CBC_GBR=CBC_GBR.predict(X_ML_CBC_GBR).item()
-    Nd_CBC_GBR=Nn_CBC_GBR*phi_CBC_GBR
+    X_ML_CBC_XB=CBC_XB_sc.transform(X_ML_CBC)
+    Nn_CBC_XB=CBC_XB.predict(X_ML_CBC_XB).item()
+    Nd_CBC_XB=Nn_CBC_XB*phi_CBC_XB
     
 elif column_type=='Rectangular Column':
     X_ML_RC=np.array([[b,h,t,l,fy,fc]])
@@ -166,12 +166,12 @@ elif column_type=='Rectangular Beam-Column':
 st.subheader('Nominal (Nn) and Design (Nd) Resistances (kN)')
     
 if column_type=='Circular Column': 
-    if Nn_CC_XB>0: N={'XGBoost, Nn': "{:.2f}".format(Nn_CC_XB), 'XGBoost, Nd': "{:.2f}".format(Nd_CC_XB)}
-    else: N={'XGBoost, Nn': 'NG', 'XGBoost, Nd': 'NG'}    
+    if Nn_CC_GBR>0: N={'GBR, Nn': "{:.2f}".format(Nn_CC_GBR), 'GBR, Nd': "{:.2f}".format(Nd_CC_GBR)}
+    else: N={'GBR, Nn': 'NG', 'GBR, Nd': 'NG'}    
         
 elif column_type=='Circular Beam-Column':
-    if Nn_CBC_GBR>0: N={'GBR, Nn': "{:.2f}".format(Nn_CBC_GBR),'GBR, Nd': "{:.2f}".format(Nd_CBC_GBR)}
-    else: N={'GBR, Nn': 'NG', 'GBR, Nd': 'NG'}
+    if Nn_CBC_XB>0: N={'XGBoost, Nn': "{:.2f}".format(Nn_CBC_XB),'XGBoost, Nd': "{:.2f}".format(Nd_CBC_XB)}
+    else: N={'XGBoost, Nn': 'NG', 'XGBoost, Nd': 'NG'}
 
 elif column_type=='Rectangular Column':
     if Nn_RC_CB>0: N={'CatBoost, Nn': "{:.2f}".format(Nn_RC_CB), 'CatBoost, Nd': "{:.2f}".format(Nd_RC_CB)}
@@ -194,9 +194,9 @@ if column_type=='Circular Column':
     t1=np.full((len(fy1),1),t)
     l1=np.full((len(fy1),1),l)
     X_ML_CC_1=np.concatenate((d1, t1, l1, fy1, fc1), axis=1)
-    X_ML_CC_XB_1=CC_XB_sc.transform(X_ML_CC_1)
-    Nn_CC_XB_1=CC_XB.predict(X_ML_CC_XB_1)
-    Nd_CC_XB_1=Nn_CC_XB_1*phi_CC_XB
+    X_ML_CC_GBR_1=CC_GBR_sc.transform(X_ML_CC_1)
+    Nn_CC_GBR_1=CC_GBR.predict(X_ML_CC_GBR_1)
+    Nd_CC_GBR_1=Nn_CC_GBR_1*phi_CC_GBR
    
     fc2=np.arange(fc_CC_min,fc_CC_max+1,10)
     fc2=fc2.reshape(len(fc2),1)
@@ -205,9 +205,9 @@ if column_type=='Circular Column':
     t2=np.full((len(fc2),1),t)
     l2=np.full((len(fc2),1),l)   
     X_ML_CC_2=np.concatenate((d2, t2, l2, fy2, fc2), axis=1)
-    X_ML_CC_XB_2=CC_XB_sc.transform(X_ML_CC_2)
-    Nn_CC_XB_2=CC_XB.predict(X_ML_CC_XB_2)
-    Nd_CC_XB_2=Nn_CC_XB_2*phi_CC_XB 
+    X_ML_CC_GBR_2=CC_GBR_sc.transform(X_ML_CC_2)
+    Nn_CC_GBR_2=CC_GBR.predict(X_ML_CC_GBR_2)
+    Nd_CC_GBR_2=Nn_CC_GBR_2*phi_CC_GBR 
 
     d3=np.arange(d_CC_min,d_CC_max+1,10.0)
     d3=d3.reshape(len(d3),1)
@@ -216,9 +216,9 @@ if column_type=='Circular Column':
     t3=np.full((len(d3),1),t)
     l3=np.full((len(d3),1),l)
     X_ML_CC_3=np.concatenate((d3, t3, l3, fy3, fc3), axis=1)
-    X_ML_CC_XB_3=CC_XB_sc.transform(X_ML_CC_3)
-    Nn_CC_XB_3=CC_XB.predict(X_ML_CC_XB_3)
-    Nd_CC_XB_3=Nn_CC_XB_3*phi_CC_XB    
+    X_ML_CC_GBR_3=CC_GBR_sc.transform(X_ML_CC_3)
+    Nn_CC_GBR_3=CC_GBR.predict(X_ML_CC_GBR_3)
+    Nd_CC_GBR_3=Nn_CC_GBR_3*phi_CC_GBR    
     
     t4=np.arange(t_CC_min,t_CC_max+0.1,0.5)
     t4=t4.reshape(len(t4),1)
@@ -227,9 +227,9 @@ if column_type=='Circular Column':
     d4=np.full((len(t4),1),d)
     l4=np.full((len(t4),1),l)
     X_ML_CC_4=np.concatenate((d4, t4, l4, fy4, fc4), axis=1)
-    X_ML_CC_XB_4=CC_XB_sc.transform(X_ML_CC_4)
-    Nn_CC_XB_4=CC_XB.predict(X_ML_CC_XB_4)
-    Nd_CC_XB_4=Nn_CC_XB_4*phi_CC_XB    
+    X_ML_CC_GBR_4=CC_GBR_sc.transform(X_ML_CC_4)
+    Nn_CC_GBR_4=CC_GBR.predict(X_ML_CC_GBR_4)
+    Nd_CC_GBR_4=Nn_CC_GBR_4*phi_CC_GBR    
 
     l5=np.arange(l_CC_min,l_CC_max+1,100.0)
     l5=l5.reshape(len(l5),1)
@@ -238,58 +238,58 @@ if column_type=='Circular Column':
     d5=np.full((len(l5),1),d)
     t5=np.full((len(l5),1),t)
     X_ML_CC_5=np.concatenate((d5, t5, l5, fy5, fc5), axis=1)
-    X_ML_CC_XB_5=CC_XB_sc.transform(X_ML_CC_5)
-    Nn_CC_XB_5=CC_XB.predict(X_ML_CC_XB_5)
-    Nd_CC_XB_5=Nn_CC_XB_5*phi_CC_XB    
+    X_ML_CC_GBR_5=CC_GBR_sc.transform(X_ML_CC_5)
+    Nn_CC_GBR_5=CC_GBR.predict(X_ML_CC_GBR_5)
+    Nd_CC_GBR_5=Nn_CC_GBR_5*phi_CC_GBR    
     
     f1 = plt.figure(figsize=(6.75,4*3/2), dpi=200)
 
     ax1 = f1.add_subplot(3,2,2)
-    ax1.plot(fy1, Nn_CC_XB_1, color='#e31a1c',linewidth=1.5, label='XGBoost, Nn',linestyle='solid')
-    ax1.plot(fy1, Nd_CC_XB_1, color='#0070C0',linewidth=1.5, label='XGBoost, Nd',linestyle='solid')
+    ax1.plot(fy1, Nn_CC_GBR_1, color='#e31a1c',linewidth=1.5, label='GBR, Nn',linestyle='solid')
+    ax1.plot(fy1, Nd_CC_GBR_1, color='#0070C0',linewidth=1.5, label='GBR, Nd',linestyle='solid')
     fy_loc=np.where(fy1==fy)[0].item()
-    ax1.scatter(fy,Nn_CC_XB_1[fy_loc],marker='o',facecolors='#e31a1c')
-    ax1.scatter(fy,Nd_CC_XB_1[fy_loc],marker='o',facecolors='#0070C0')
+    ax1.scatter(fy,Nn_CC_GBR_1[fy_loc],marker='o',facecolors='#e31a1c')
+    ax1.scatter(fy,Nd_CC_GBR_1[fy_loc],marker='o',facecolors='#0070C0')
     ax1.tick_params(axis='both', which='major', labelsize=10, direction='in', width=0.5)
     ax1.set_ylabel('Resistance (kN)', fontsize=10)
     ax1.set_xlabel('fy (MPa)', fontsize=10)
     
     ax2 = f1.add_subplot(3,2,1)
-    ax2.plot(fc2, Nn_CC_XB_2, color='#e31a1c',linewidth=1.5, linestyle='solid')
-    ax2.plot(fc2, Nd_CC_XB_2, color='#0070C0',linewidth=1.5, linestyle='solid')
+    ax2.plot(fc2, Nn_CC_GBR_2, color='#e31a1c',linewidth=1.5, linestyle='solid')
+    ax2.plot(fc2, Nd_CC_GBR_2, color='#0070C0',linewidth=1.5, linestyle='solid')
     fc_loc=np.where(fc2==fc)[0].item()
-    ax2.scatter(fc,Nn_CC_XB_2[fc_loc],marker='o',facecolors='#e31a1c')
-    ax2.scatter(fc,Nd_CC_XB_2[fc_loc],marker='o',facecolors='#0070C0')
+    ax2.scatter(fc,Nn_CC_GBR_2[fc_loc],marker='o',facecolors='#e31a1c')
+    ax2.scatter(fc,Nd_CC_GBR_2[fc_loc],marker='o',facecolors='#0070C0')
     ax2.tick_params(axis='both', which='major', labelsize=10, direction='in', width=0.5)
     ax2.set_ylabel('Resistance (kN)', fontsize=10)
     ax2.set_xlabel("f'c (MPa)", fontsize=10)
     
     ax3 = f1.add_subplot(3,2,4)
-    ax3.plot(d3, Nn_CC_XB_3, color='#e31a1c',linewidth=1.5, linestyle='solid')
-    ax3.plot(d3, Nd_CC_XB_3, color='#0070C0',linewidth=1.5, linestyle='solid')
+    ax3.plot(d3, Nn_CC_GBR_3, color='#e31a1c',linewidth=1.5, linestyle='solid')
+    ax3.plot(d3, Nd_CC_GBR_3, color='#0070C0',linewidth=1.5, linestyle='solid')
     d_loc=np.where(d3==d)[0].item()
-    ax3.scatter(d,Nn_CC_XB_3[d_loc],marker='o',facecolors='#e31a1c')
-    ax3.scatter(d,Nd_CC_XB_3[d_loc],marker='o',facecolors='#0070C0')
+    ax3.scatter(d,Nn_CC_GBR_3[d_loc],marker='o',facecolors='#e31a1c')
+    ax3.scatter(d,Nd_CC_GBR_3[d_loc],marker='o',facecolors='#0070C0')
     ax3.tick_params(axis='both', which='major', labelsize=10, direction='in', width=0.5)
     ax3.set_ylabel('Resistance (kN)', fontsize=10)
     ax3.set_xlabel('D (mm)', fontsize=10)
     
     ax4 = f1.add_subplot(3,2,3)
-    ax4.plot(t4, Nn_CC_XB_4, color='#e31a1c',linewidth=1.5, linestyle='solid')
-    ax4.plot(t4, Nd_CC_XB_4, color='#0070C0',linewidth=1.5, linestyle='solid')
+    ax4.plot(t4, Nn_CC_GBR_4, color='#e31a1c',linewidth=1.5, linestyle='solid')
+    ax4.plot(t4, Nd_CC_GBR_4, color='#0070C0',linewidth=1.5, linestyle='solid')
     t_loc=np.where(t4==t)[0].item()
-    ax4.scatter(t,Nn_CC_XB_4[t_loc],marker='o',facecolors='#e31a1c')
-    ax4.scatter(t,Nd_CC_XB_4[t_loc],marker='o',facecolors='#0070C0')
+    ax4.scatter(t,Nn_CC_GBR_4[t_loc],marker='o',facecolors='#e31a1c')
+    ax4.scatter(t,Nd_CC_GBR_4[t_loc],marker='o',facecolors='#0070C0')
     ax4.tick_params(axis='both', which='major', labelsize=10, direction='in', width=0.5)
     ax4.set_ylabel('Resistance (kN)', fontsize=10)
     ax4.set_xlabel('t (mm)', fontsize=10)
     
     ax5 = f1.add_subplot(3,2,5)
-    ax5.plot(l5, Nn_CC_XB_5, color='#e31a1c',linewidth=1.5, linestyle='solid')
-    ax5.plot(l5, Nd_CC_XB_5, color='#0070C0',linewidth=1.5, linestyle='solid')
+    ax5.plot(l5, Nn_CC_GBR_5, color='#e31a1c',linewidth=1.5, linestyle='solid')
+    ax5.plot(l5, Nd_CC_GBR_5, color='#0070C0',linewidth=1.5, linestyle='solid')
     l_loc=np.where(l5==l)[0].item()
-    ax5.scatter(l,Nn_CC_XB_5[l_loc],marker='o',facecolors='#e31a1c')
-    ax5.scatter(l,Nd_CC_XB_5[l_loc],marker='o',facecolors='#0070C0')
+    ax5.scatter(l,Nn_CC_GBR_5[l_loc],marker='o',facecolors='#e31a1c')
+    ax5.scatter(l,Nd_CC_GBR_5[l_loc],marker='o',facecolors='#0070C0')
     ax5.tick_params(axis='both', which='major', labelsize=10, direction='in', width=0.5)
     ax5.set_ylabel('Resistance (kN)', fontsize=10)
     ax5.set_xlabel('L (mm)', fontsize=10)
@@ -299,7 +299,7 @@ if column_type=='Circular Column':
     st.pyplot(f1)
     
     st.subheader('Nomenclature')
-    st.write("D is the outside diameter of circular column cross section;  L is column length; Nn and Nd are the nominal and design resistances of columns; XGBoost is extreme gradient boosting regressor; f'c is concrete compressive strength; fy is steel yield strength; t is tube wall thickness.")
+    st.write("D is the outside diameter of circular column cross section; GBR is gradient boosting regressor; L is column length; Nn and Nd are the nominal and design resistances of columns; f'c is concrete compressive strength; fy is steel yield strength; t is tube wall thickness.")
 
 elif column_type=='Circular Beam-Column':
     fy1=np.arange(fy_CBC_min,fy_CBC_max+1,50)
@@ -310,9 +310,9 @@ elif column_type=='Circular Beam-Column':
     l1=np.full((len(fy1),1),l)
     e1=np.full((len(fy1),1),e)
     X_ML_CBC_1=np.concatenate((d1, t1, l1, fy1, fc1, e1, e1), axis=1)
-    X_ML_CBC_GBR_1=CBC_GBR_sc.transform(X_ML_CBC_1)
-    Nn_CBC_GBR_1=CBC_GBR.predict(X_ML_CBC_GBR_1)
-    Nd_CBC_GBR_1=Nn_CBC_GBR_1*phi_CBC_GBR
+    X_ML_CBC_XB_1=CBC_XB_sc.transform(X_ML_CBC_1)
+    Nn_CBC_XB_1=CBC_XB.predict(X_ML_CBC_XB_1)
+    Nd_CBC_XB_1=Nn_CBC_XB_1*phi_CBC_XB
 
     fc2=np.arange(fc_CBC_min,fc_CBC_max+1,10)
     fc2=fc2.reshape(len(fc2),1)
@@ -322,9 +322,9 @@ elif column_type=='Circular Beam-Column':
     l2=np.full((len(fc2),1),l)
     e2=np.full((len(fc2),1),e)    
     X_ML_CBC_2=np.concatenate((d2, t2, l2, fy2, fc2, e2, e2), axis=1)
-    X_ML_CBC_GBR_2=CBC_GBR_sc.transform(X_ML_CBC_2)
-    Nn_CBC_GBR_2=CBC_GBR.predict(X_ML_CBC_GBR_2)
-    Nd_CBC_GBR_2=Nn_CBC_GBR_2*phi_CBC_GBR 
+    X_ML_CBC_XB_2=CBC_XB_sc.transform(X_ML_CBC_2)
+    Nn_CBC_XB_2=CBC_XB.predict(X_ML_CBC_XB_2)
+    Nd_CBC_XB_2=Nn_CBC_XB_2*phi_CBC_XB 
 
     d3=np.arange(d_CBC_min,d_CBC_max+1,10.0)
     d3=d3.reshape(len(d3),1)
@@ -334,9 +334,9 @@ elif column_type=='Circular Beam-Column':
     l3=np.full((len(d3),1),l)
     e3=np.full((len(d3),1),e)
     X_ML_CBC_3=np.concatenate((d3, t3, l3, fy3, fc3, e3, e3), axis=1)
-    X_ML_CBC_GBR_3=CBC_GBR_sc.transform(X_ML_CBC_3)
-    Nn_CBC_GBR_3=CBC_GBR.predict(X_ML_CBC_GBR_3)
-    Nd_CBC_GBR_3=Nn_CBC_GBR_3*phi_CBC_GBR    
+    X_ML_CBC_XB_3=CBC_XB_sc.transform(X_ML_CBC_3)
+    Nn_CBC_XB_3=CBC_XB.predict(X_ML_CBC_XB_3)
+    Nd_CBC_XB_3=Nn_CBC_XB_3*phi_CBC_XB    
     
     t4=np.arange(t_CBC_min,t_CBC_max+0.1,0.5)
     t4=t4.reshape(len(t4),1)
@@ -346,9 +346,9 @@ elif column_type=='Circular Beam-Column':
     l4=np.full((len(t4),1),l)
     e4=np.full((len(t4),1),e)
     X_ML_CBC_4=np.concatenate((d4, t4, l4, fy4, fc4, e4, e4), axis=1)
-    X_ML_CBC_GBR_4=CBC_GBR_sc.transform(X_ML_CBC_4)
-    Nn_CBC_GBR_4=CBC_GBR.predict(X_ML_CBC_GBR_4)
-    Nd_CBC_GBR_4=Nn_CBC_GBR_4*phi_CBC_GBR    
+    X_ML_CBC_XB_4=CBC_XB_sc.transform(X_ML_CBC_4)
+    Nn_CBC_XB_4=CBC_XB.predict(X_ML_CBC_XB_4)
+    Nd_CBC_XB_4=Nn_CBC_XB_4*phi_CBC_XB    
 
     l5=np.arange(l_CBC_min,l_CBC_max+1,100.0)
     l5=l5.reshape(len(l5),1)
@@ -358,9 +358,9 @@ elif column_type=='Circular Beam-Column':
     t5=np.full((len(l5),1),t)
     e5=np.full((len(l5),1),e)
     X_ML_CBC_5=np.concatenate((d5, t5, l5, fy5, fc5, e5, e5), axis=1)
-    X_ML_CBC_GBR_5=CBC_GBR_sc.transform(X_ML_CBC_5)
-    Nn_CBC_GBR_5=CBC_GBR.predict(X_ML_CBC_GBR_5)
-    Nd_CBC_GBR_5=Nn_CBC_GBR_5*phi_CBC_GBR    
+    X_ML_CBC_XB_5=CBC_XB_sc.transform(X_ML_CBC_5)
+    Nn_CBC_XB_5=CBC_XB.predict(X_ML_CBC_XB_5)
+    Nd_CBC_XB_5=Nn_CBC_XB_5*phi_CBC_XB    
 
     e6=np.arange(e_CBC_min,e_CBC_max+0.1,5.0)
     e6=e6.reshape(len(e6),1)
@@ -370,68 +370,68 @@ elif column_type=='Circular Beam-Column':
     t6=np.full((len(e6),1),t)
     l6=np.full((len(e6),1),l)
     X_ML_CBC_6=np.concatenate((d6, t6, l6, fy6, fc6, e6, e6), axis=1)
-    X_ML_CBC_GBR_6=CBC_GBR_sc.transform(X_ML_CBC_6)
-    Nn_CBC_GBR_6=CBC_GBR.predict(X_ML_CBC_GBR_6)
-    Nd_CBC_GBR_6=Nn_CBC_GBR_6*phi_CBC_GBR  
+    X_ML_CBC_XB_6=CBC_XB_sc.transform(X_ML_CBC_6)
+    Nn_CBC_XB_6=CBC_XB.predict(X_ML_CBC_XB_6)
+    Nd_CBC_XB_6=Nn_CBC_XB_6*phi_CBC_XB  
 
     f1 = plt.figure(figsize=(6.75,4*3/2), dpi=200)
 
     ax1 = f1.add_subplot(3,2,2)
-    ax1.plot(fy1, Nn_CBC_GBR_1, color='#e31a1c',linewidth=1.5, label='GBR, Nn',linestyle='solid')
-    ax1.plot(fy1, Nd_CBC_GBR_1, color='#0070C0',linewidth=1.5, label='GBR, Nd',linestyle='solid')
+    ax1.plot(fy1, Nn_CBC_XB_1, color='#e31a1c',linewidth=1.5, label='XGBoost, Nn',linestyle='solid')
+    ax1.plot(fy1, Nd_CBC_XB_1, color='#0070C0',linewidth=1.5, label='XGBoost, Nd',linestyle='solid')
     fy_loc=np.where(fy1==fy)[0].item()
-    ax1.scatter(fy,Nn_CBC_GBR_1[fy_loc],marker='o',facecolors='#e31a1c')
-    ax1.scatter(fy,Nd_CBC_GBR_1[fy_loc],marker='o',facecolors='#0070C0')
+    ax1.scatter(fy,Nn_CBC_XB_1[fy_loc],marker='o',facecolors='#e31a1c')
+    ax1.scatter(fy,Nd_CBC_XB_1[fy_loc],marker='o',facecolors='#0070C0')
     ax1.tick_params(axis='both', which='major', labelsize=10, direction='in', width=0.5)
     ax1.set_ylabel('Resistance (kN)', fontsize=10)
     ax1.set_xlabel('fy (MPa)', fontsize=10)
     
     ax2 = f1.add_subplot(3,2,1)
-    ax2.plot(fc2, Nn_CBC_GBR_2, color='#e31a1c',linewidth=1.5, linestyle='solid')
-    ax2.plot(fc2, Nd_CBC_GBR_2, color='#0070C0',linewidth=1.5, linestyle='solid')
+    ax2.plot(fc2, Nn_CBC_XB_2, color='#e31a1c',linewidth=1.5, linestyle='solid')
+    ax2.plot(fc2, Nd_CBC_XB_2, color='#0070C0',linewidth=1.5, linestyle='solid')
     fc_loc=np.where(fc2==fc)[0].item()
-    ax2.scatter(fc,Nn_CBC_GBR_2[fc_loc],marker='o',facecolors='#e31a1c')
-    ax2.scatter(fc,Nd_CBC_GBR_2[fc_loc],marker='o',facecolors='#0070C0')
+    ax2.scatter(fc,Nn_CBC_XB_2[fc_loc],marker='o',facecolors='#e31a1c')
+    ax2.scatter(fc,Nd_CBC_XB_2[fc_loc],marker='o',facecolors='#0070C0')
     ax2.tick_params(axis='both', which='major', labelsize=10, direction='in', width=0.5)
     ax2.set_ylabel('Resistance (kN)', fontsize=10)
     ax2.set_xlabel("f'c (MPa)", fontsize=10)
     
     ax3 = f1.add_subplot(3,2,4)
-    ax3.plot(d3, Nn_CBC_GBR_3, color='#e31a1c',linewidth=1.5, linestyle='solid')
-    ax3.plot(d3, Nd_CBC_GBR_3, color='#0070C0',linewidth=1.5, linestyle='solid')
+    ax3.plot(d3, Nn_CBC_XB_3, color='#e31a1c',linewidth=1.5, linestyle='solid')
+    ax3.plot(d3, Nd_CBC_XB_3, color='#0070C0',linewidth=1.5, linestyle='solid')
     d_loc=np.where(d3==d)[0].item()
-    ax3.scatter(d,Nn_CBC_GBR_3[d_loc],marker='o',facecolors='#e31a1c')
-    ax3.scatter(d,Nd_CBC_GBR_3[d_loc],marker='o',facecolors='#0070C0')
+    ax3.scatter(d,Nn_CBC_XB_3[d_loc],marker='o',facecolors='#e31a1c')
+    ax3.scatter(d,Nd_CBC_XB_3[d_loc],marker='o',facecolors='#0070C0')
     ax3.tick_params(axis='both', which='major', labelsize=10, direction='in', width=0.5)
     ax3.set_ylabel('Resistance (kN)', fontsize=10)
     ax3.set_xlabel('D (mm)', fontsize=10)
     
     ax4 = f1.add_subplot(3,2,3)
-    ax4.plot(t4, Nn_CBC_GBR_4, color='#e31a1c',linewidth=1.5, linestyle='solid')
-    ax4.plot(t4, Nd_CBC_GBR_4, color='#0070C0',linewidth=1.5, linestyle='solid')
+    ax4.plot(t4, Nn_CBC_XB_4, color='#e31a1c',linewidth=1.5, linestyle='solid')
+    ax4.plot(t4, Nd_CBC_XB_4, color='#0070C0',linewidth=1.5, linestyle='solid')
     t_loc=np.where(t4==t)[0].item()
-    ax4.scatter(t,Nn_CBC_GBR_4[t_loc],marker='o',facecolors='#e31a1c')
-    ax4.scatter(t,Nd_CBC_GBR_4[t_loc],marker='o',facecolors='#0070C0')
+    ax4.scatter(t,Nn_CBC_XB_4[t_loc],marker='o',facecolors='#e31a1c')
+    ax4.scatter(t,Nd_CBC_XB_4[t_loc],marker='o',facecolors='#0070C0')
     ax4.tick_params(axis='both', which='major', labelsize=10, direction='in', width=0.5)
     ax4.set_ylabel('Resistance (kN)', fontsize=10)
     ax4.set_xlabel('t (mm)', fontsize=10)
     
     ax5 = f1.add_subplot(3,2,5)
-    ax5.plot(l5, Nn_CBC_GBR_5, color='#e31a1c',linewidth=1.5, linestyle='solid')
-    ax5.plot(l5, Nd_CBC_GBR_5, color='#0070C0',linewidth=1.5, linestyle='solid')
+    ax5.plot(l5, Nn_CBC_XB_5, color='#e31a1c',linewidth=1.5, linestyle='solid')
+    ax5.plot(l5, Nd_CBC_XB_5, color='#0070C0',linewidth=1.5, linestyle='solid')
     l_loc=np.where(l5==l)[0].item()
-    ax5.scatter(l,Nn_CBC_GBR_5[l_loc],marker='o',facecolors='#e31a1c')
-    ax5.scatter(l,Nd_CBC_GBR_5[l_loc],marker='o',facecolors='#0070C0')
+    ax5.scatter(l,Nn_CBC_XB_5[l_loc],marker='o',facecolors='#e31a1c')
+    ax5.scatter(l,Nd_CBC_XB_5[l_loc],marker='o',facecolors='#0070C0')
     ax5.tick_params(axis='both', which='major', labelsize=10, direction='in', width=0.5)
     ax5.set_ylabel('Resistance (kN)', fontsize=10)
     ax5.set_xlabel('L (mm)', fontsize=10)
     
     ax6 = f1.add_subplot(3,2,6)
-    ax6.plot(e6, Nn_CBC_GBR_6, color='#e31a1c',linewidth=1.5, linestyle='solid')
-    ax6.plot(e6, Nd_CBC_GBR_6, color='#0070C0',linewidth=1.5, linestyle='solid')
+    ax6.plot(e6, Nn_CBC_XB_6, color='#e31a1c',linewidth=1.5, linestyle='solid')
+    ax6.plot(e6, Nd_CBC_XB_6, color='#0070C0',linewidth=1.5, linestyle='solid')
     e_loc=np.where(e6==e)[0].item()
-    ax6.scatter(e,Nn_CBC_GBR_6[e_loc],marker='o',facecolors='#e31a1c')
-    ax6.scatter(e,Nd_CBC_GBR_6[e_loc],marker='o',facecolors='#0070C0')
+    ax6.scatter(e,Nn_CBC_XB_6[e_loc],marker='o',facecolors='#e31a1c')
+    ax6.scatter(e,Nd_CBC_XB_6[e_loc],marker='o',facecolors='#0070C0')
     ax6.tick_params(axis='both', which='major', labelsize=10, direction='in', width=0.5)
     ax6.set_ylabel('Resistance (kN)', fontsize=10)
     ax6.set_xlabel('e (mm)', fontsize=10)
@@ -440,7 +440,7 @@ elif column_type=='Circular Beam-Column':
     f1.tight_layout()
     st.pyplot(f1)
     st.subheader('Nomenclature')
-    st.write("D is the outside diameter of circular column cross section; GBR is gradient boosting regressor; L is column length; Nn and Nd are the nominal and design resistances of beam-columns; e is load eccentricity; f'c is concrete compressive strength; fy is steel yield strength; t is tube wall thickness.")    
+    st.write("D is the outside diameter of circular column cross section; L is column length; Nn and Nd are the nominal and design resistances of beam-columns; XGBoost is extreme gradient boosting regressor; e is load eccentricity; f'c is concrete compressive strength; fy is steel yield strength; t is tube wall thickness.")    
 
 elif column_type=='Rectangular Column':
     fy1=np.arange(fy_RC_min,fy_RC_max+1,50)
