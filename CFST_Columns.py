@@ -44,13 +44,13 @@ if column_type=='Circular Column':
     fc_CC_max=110
     fc=st.sidebar.slider("f'c (MPa)",min_value=fc_CC_min, max_value=fc_CC_max, step=10)
     fy_CC_min=250
-    fy_CC_max=math.floor(min([450,0.7*210*(fc+8)**0.31])/50)*50
+    fy_CC_max=math.floor(min([450,0.7*200*(fc+8)**0.31])/50)*50
     fy=st.sidebar.slider("fy (MPa)",min_value=fy_CC_min, max_value=fy_CC_max,step=50)
     t_CC_min=1.5
     t_CC_max=10.0   
     t=st.sidebar.slider("t (mm)",min_value=t_CC_min, max_value=t_CC_max, step=0.5)
-    d_CC_min=math.ceil(max([210000*0.03*t/fy,60.0])/10)*10.0
-    d_CC_max=math.floor(min([210000*0.17*t/fy,320.0])/10)*10.0
+    d_CC_min=math.ceil(max([200000*0.03*t/fy,60.0])/10)*10.0
+    d_CC_max=math.floor(min([200000*0.17*t/fy,320.0])/10)*10.0
     d=st.sidebar.slider("D (mm)",min_value=d_CC_min, max_value=d_CC_max, step=10.0)
     l_CC_min=math.ceil(max([2*d,500.0])/100)*100.0
     l_CC_max=math.floor(min([22*d,3400.0])/100)*100.0
@@ -60,13 +60,13 @@ elif column_type=='Circular Beam-Column':
     fc_CBC_max=100
     fc=st.sidebar.slider("f'c (MPa)",min_value=fc_CBC_min, max_value=fc_CBC_max, step=10)
     fy_CBC_min=250
-    fy_CBC_max=math.floor(min([450,0.7*210*(fc+8)**0.31])/50)*50
+    fy_CBC_max=math.floor(min([450,0.7*200*(fc+8)**0.31])/50)*50
     fy=st.sidebar.slider("fy (MPa)",min_value=fy_CBC_min, max_value=fy_CBC_max,step=50)
     t_CBC_min=2.0
     t_CBC_max=7.5
     t=st.sidebar.slider("t (mm)",min_value=t_CBC_min, max_value=t_CBC_max, step=0.5)
-    d_CBC_min=math.ceil(max([210000*0.03*t/fy,80.0])/10)*10.0
-    d_CBC_max=math.floor(min([210000*0.13*t/fy,220.0])/10)*10.0
+    d_CBC_min=math.ceil(max([200000*0.03*t/fy,80.0])/10)*10.0
+    d_CBC_max=math.floor(min([200000*0.13*t/fy,220.0])/10)*10.0
     d=st.sidebar.slider("D (mm)",min_value=d_CBC_min, max_value=d_CBC_max, step=10.0)
     l_CBC_min=math.ceil(max([4*d,500.0])/100)*100.0
     l_CBC_max=math.floor(min([29*d,3700.0])/100)*100.0
@@ -79,13 +79,13 @@ elif column_type=='Rectangular Column':
     fc_RC_max=120
     fc=st.sidebar.slider("f'c (MPa)",min_value=fc_RC_min, max_value=fc_RC_max, step=10)
     fy_RC_min=250
-    fy_RC_max=math.floor(min([750,0.7*210*(fc+8)**0.31])/50)*50
+    fy_RC_max=math.floor(min([750,0.7*200*(fc+8)**0.31])/50)*50
     fy=st.sidebar.slider("fy (MPa)",min_value=fy_RC_min, max_value=fy_RC_max,step=50)
     t_RC_min=2.0
     t_RC_max=8.0
     t=st.sidebar.slider("t (mm)",min_value=t_RC_min, max_value=t_RC_max, step=0.5)
-    b_RC_min=math.ceil(max([(210000**0.5)*0.65*t/(fy**0.5),80.0])/10)*10.0
-    b_RC_max=math.floor(min([(210000**0.5)*3.3*t/(fy**0.5),250.0])/10)*10.0
+    b_RC_min=math.ceil(max([(200000**0.5)*0.65*t/(fy**0.5),80.0])/10)*10.0
+    b_RC_max=math.floor(min([(200000**0.5)*3.3*t/(fy**0.5),250.0])/10)*10.0
     b=st.sidebar.slider("B (mm)",min_value=b_RC_min, max_value=b_RC_max, step=10.0)
     h_RC_min=math.ceil(b/10)*10.0
     h_RC_max=math.floor(min([1.67*b,250.0])/10)*10.0
@@ -98,13 +98,13 @@ elif column_type=='Rectangular Beam-Column':
     fc_RBC_max=100
     fc=st.sidebar.slider("f'c (MPa)",min_value=fc_RBC_min, max_value=fc_RBC_max, step=10)
     fy_RBC_min=250
-    fy_RBC_max=math.floor(min([750,0.7*210*(fc+8)**0.31])/50)*50
+    fy_RBC_max=math.floor(min([750,0.7*200*(fc+8)**0.31])/50)*50
     fy=st.sidebar.slider("fy (MPa)",min_value=fy_RBC_min, max_value=fy_RBC_max,step=50)
     t_RBC_min=3.0
     t_RBC_max=8.0
     t=st.sidebar.slider("t (mm)",min_value=t_RBC_min, max_value=t_RBC_max, step=0.5)
-    b_RBC_min=math.ceil(max([(210000**0.5)*0.72*t/(fy**0.5),100.0])/10)*10.0
-    b_RBC_max=math.floor(min([(210000**0.5)*2.67*t/(fy**0.5),220.0])/10)*10.0
+    b_RBC_min=math.ceil(max([(200000**0.5)*0.72*t/(fy**0.5),100.0])/10)*10.0
+    b_RBC_max=math.floor(min([(200000**0.5)*2.67*t/(fy**0.5),220.0])/10)*10.0
     b=st.sidebar.slider("B (mm)",min_value=b_RBC_min, max_value=b_RBC_max, step=10.0)
     h_RBC_min=math.ceil(b/10)*10.0
     h_RBC_max=math.floor(min([1.5*b,220.0])/10)*10.0
