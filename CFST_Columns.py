@@ -20,12 +20,12 @@ CBC_XB=joblib.load(os.path.join(ROOT_DIR,'CFST_Circ_Beam_Columns_XGBoost_1p5p0.j
 CBC_XB_sc=pickle.load(open(os.path.join(ROOT_DIR,'CFST_Circ_Beam_Columns_XGBoost_1p5p0.pkl'),'rb'))
 
 #Rectangular columns
-RC_CB=joblib.load(os.path.join(ROOT_DIR,'CFST_Rect_Columns_CatBoost.joblib'))
-RC_CB_sc=pickle.load(open(os.path.join(ROOT_DIR,'CFST_Rect_Columns_CatBoost.pkl'),'rb'))
+RC_CB=joblib.load(os.path.join(ROOT_DIR,'CFST_Rect_Columns_CatBoost_R1.joblib'))
+RC_CB_sc=pickle.load(open(os.path.join(ROOT_DIR,'CFST_Rect_Columns_CatBoost_R1.pkl'),'rb'))
 
 #Rectangular beam-columns
-RBC_CB=joblib.load(os.path.join(ROOT_DIR,'CFST_Rect_Beam_Columns_CatBoost.joblib'))
-RBC_CB_sc=pickle.load(open(os.path.join(ROOT_DIR,'CFST_Rect_Beam_Columns_CatBoost.pkl'),'rb'))
+RBC_CB=joblib.load(os.path.join(ROOT_DIR,'CFST_Rect_Beam_Columns_CatBoost_R1.joblib'))
+RBC_CB_sc=pickle.load(open(os.path.join(ROOT_DIR,'CFST_Rect_Beam_Columns_CatBoost_R1.pkl'),'rb'))
 
 #Resistance factors
 phi_CC_GBR=0.85
@@ -87,7 +87,7 @@ elif column_type=='Rectangular Column':
     b_RC_min=math.ceil(max([(200000**0.5)*0.65*t/(fy**0.5),80.0])/10)*10.0
     b_RC_max=math.floor(min([(200000**0.5)*3.3*t/(fy**0.5),250.0])/10)*10.0
     b=st.sidebar.slider("B (mm)",min_value=b_RC_min, max_value=b_RC_max, step=10.0)
-    h_RC_min=math.ceil(b/10)*10.0
+    h_RC_min=100
     h_RC_max=math.floor(min([1.67*b,250.0])/10)*10.0
     h=st.sidebar.slider("H (mm)",min_value=h_RC_min, max_value=h_RC_max, step=10.0)
     l_RC_min=math.ceil(max([3*b,500.0])/100)*100.0
@@ -106,7 +106,7 @@ elif column_type=='Rectangular Beam-Column':
     b_RBC_min=math.ceil(max([(200000**0.5)*0.72*t/(fy**0.5),100.0])/10)*10.0
     b_RBC_max=math.floor(min([(200000**0.5)*2.67*t/(fy**0.5),220.0])/10)*10.0
     b=st.sidebar.slider("B (mm)",min_value=b_RBC_min, max_value=b_RBC_max, step=10.0)
-    h_RBC_min=math.ceil(b/10)*10.0
+    h_RBC_min=100
     h_RBC_max=math.floor(min([1.5*b,220.0])/10)*10.0
     h=st.sidebar.slider("H (mm)",min_value=h_RBC_min, max_value=h_RBC_max, step=10.0)
     l_RBC_min=math.ceil(max([3*b,500.0])/100)*100.0
