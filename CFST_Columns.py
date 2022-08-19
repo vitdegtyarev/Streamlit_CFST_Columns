@@ -87,7 +87,7 @@ elif column_type=='Rectangular Column':
     b_RC_min=math.ceil(max([(200000**0.5)*0.65*t/(fy**0.5),80.0])/10)*10.0
     b_RC_max=math.floor(min([(200000**0.5)*3.3*t/(fy**0.5),250.0])/10)*10.0
     b=st.sidebar.slider("B (mm)",min_value=b_RC_min, max_value=b_RC_max, step=10.0)
-    h_RC_min=100
+    h_RC_min=100.0
     h_RC_max=math.floor(min([1.67*b,250.0])/10)*10.0
     h=st.sidebar.slider("H (mm)",min_value=h_RC_min, max_value=h_RC_max, step=10.0)
     l_RC_min=math.ceil(max([3*b,500.0])/100)*100.0
@@ -106,7 +106,7 @@ elif column_type=='Rectangular Beam-Column':
     b_RBC_min=math.ceil(max([(200000**0.5)*0.72*t/(fy**0.5),100.0])/10)*10.0
     b_RBC_max=math.floor(min([(200000**0.5)*2.67*t/(fy**0.5),220.0])/10)*10.0
     b=st.sidebar.slider("B (mm)",min_value=b_RBC_min, max_value=b_RBC_max, step=10.0)
-    h_RBC_min=100
+    h_RBC_min=100.0
     h_RBC_max=math.floor(min([1.5*b,220.0])/10)*10.0
     h=st.sidebar.slider("H (mm)",min_value=h_RBC_min, max_value=h_RBC_max, step=10.0)
     l_RBC_min=math.ceil(max([3*b,500.0])/100)*100.0
