@@ -31,7 +31,7 @@ RBC_CB_sc=pickle.load(open(os.path.join(ROOT_DIR,'CFST_Rect_Beam_Columns_CatBoos
 phi_CC_GBR=0.85
 phi_CBC_XB=0.75
 phi_RC_CB=0.85
-phi_RBC_CB=0.85
+phi_RBC_CB=0.80
 
 st.header('Resistance of Concrete-Filled Steel Tubular (CFST) Columns Predicted by Machine Learning Models')
 
