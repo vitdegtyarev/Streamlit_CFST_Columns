@@ -753,3 +753,11 @@ elif column_type=='Rectangular Beam-Column':
 
     st.subheader('Nomenclature')
     st.write("B and H are the width and height of rectangular column cross section; CatBoost is categorical gradient boosting regressor; L is column length; Nn and Nd are the nominal and design resistances of beam-columns; e is load eccentricity; f'c is concrete compressive strength; fy is steel yield strength; t is tube wall thickness.")
+
+st.subheader('Reference')
+st.write('Degtyarev, V.V., Thai, H.-T., 2023, Design of concrete-filled steel tubular columns using data-driven methods. Journal of Constructional Steel Research, 200, 107653. https://doi.org/10.1016/j.jcsr.2022.107653.')
+st.markdown('[JCSR](https://doi.org/10.1016/j.jcsr.2022.107653)', unsafe_allow_html=True)
+st.markdown('[ResearchGate](https://www.researchgate.net/publication/365556103_Design_of_concrete-filled_steel_tubular_columns_using_data-driven_methods)', unsafe_allow_html=True)
+
+st.subheader('Source code')
+st.markdown('[GitHub](https://github.com/vitdegtyarev/Streamlit_CFST_Columns)', unsafe_allow_html=True)    
